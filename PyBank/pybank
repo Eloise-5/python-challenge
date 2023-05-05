@@ -1,0 +1,40 @@
+import csv
+import pandas as pd
+
+# Path to collect data from the Resources folder
+file = "Resources/budget_data.csv"
+py_bank_csv = pd.read_csv(file)
+py_bank_df = pd.DataFrame(py_bank_csv)
+
+#calculate number of months
+no_months = len(py_bank_csv)-1
+
+#net amt of prof/loss
+netprof = py_bank_df["Profit/Losses"].sum()
+
+#Average change
+avgprof = py_bank_df["Profit/Losses"].mean()
+
+#Max price
+maxprice = py_bank_df["Profit/Losses"].max()
+#Max date
+maxdate = py_bank_df.loc[py_bank_df["Profit/Losses"].idxmax()]["Date"]
+
+#Min price
+minprice = py_bank_df["Profit/Losses"].min()
+#Min date
+mindate = py_bank_df.loc[py_bank_df["Profit/Losses"].idxmin()]["Date"]
+
+
+output = f"""Financial Analysis
+----------------------------
+Total Months: {no_months}
+Total: ${netprof}
+Average Change: ${avgprof:.2f}
+Greatest Increase in Profits: {maxdate} (${maxprice})
+Greatest Decrease in Profits: {mindate} (${minprice})"""
+
+#output to text file
+text_file = open('bank_results.txt', "w")
+text_file.write(output)
+text_file.close()

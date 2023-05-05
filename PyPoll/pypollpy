@@ -1,0 +1,44 @@
+
+import csv
+
+#open the csv file
+with open('election_data.csv', 'r') as file:
+    reader = csv.reader(file)
+
+    next(reader)
+
+vote_counts = {}
+
+for row in reader:
+    candidate = row[2]
+
+    if candidate in vote_counts:
+        vote_counts[candidate] += 1
+    else:
+        vote_counts[candidate] = 1
+
+#get total number of votes
+total_votes = sum(vote_counts.values())
+
+#Candidate vote counts & percentages
+for candidate, count in vote_counts.items():
+    percent = count/total_votes * 100
+
+#Find candidate with greatest frequency (winner)
+max_count = max(vote_counts.values())
+max_candidate = [candidate for candidate, count in vote_counts.items() if count == max_count][0]
+
+#print everything
+output = f"""Election Results
+----------------------------
+Total Votes: {total_votes}
+----------------------------
+{candidate} : {percent:2f}% ({count})
+----------------------------
+Winner: {max_candidate}
+----------------------------"""
+
+#output to text file
+text_file = open('poll_results.txt', "w")
+text_file.write(output)
+text_file.close()
